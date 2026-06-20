@@ -1,11 +1,39 @@
 FROM node:20-alpine
 
+# Install dependencies required by sharp and tesseract.js
+RUN apk add --no-cache \
+  vips-dev \
+  fftw-dev \
+  glib-dev \
+  expat-dev \
+  tesseract-ocr \
+  leptonica-dev \
+  libtool \
+  autoconf \
+  automake \
+  make \
+  g++ \
+  pkgconfig
+
 WORKDIR /app
 
+# Copy package files first for better caching
 COPY backend/package*.json ./
-RUN npm ci --only=production
 
+# Install ALL dependencies (not just production) since sharp and tesseract.js need build tools at install time
+RUN npm ci
+
+# Copy the rest of the application
 COPY backend/ ./
+
+# Create required directories
+RUN mkdir -p logs uploads/receipts uploads/thumbnails uploads/backups
+
+# Remove dev dependencies after build
+RUN npm prune --production
+
+# Copy tesseract language data
+COPY backend/eng.traineddata /usr/share/tessdata/eng.traineddata 2>/dev/null || true
 
 EXPOSE 5000
 
