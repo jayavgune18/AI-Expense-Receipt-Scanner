@@ -1,0 +1,48 @@
+# Render Blueprint Deployment Configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service
+  - type: web
+    name: expense-scanner-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "15m"
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: "7d"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: EMAIL_FROM
+        value: noreply@expensescanner.com
+      - key: FRONTEND_URL
+        value: https://expense-scanner-frontend.onrender.com
+      - key: BACKEND_URL
+        value: https://expense-scanner-api.onrender.com

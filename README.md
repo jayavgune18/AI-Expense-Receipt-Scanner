@@ -202,20 +202,37 @@ docker run -p 5000:5000 --env-file backend/.env expense-scanner-backend
 
 ## 🚀 Production Deployment
 
-### Frontend → Vercel
+### Option 1: Deploy to Render (Backend only, using `render.yaml`)
+
+1. **Push the repo to GitHub**
+2. **In Render Dashboard:**
+   - Click **"New +"** → **"Blueprint"** (Blueprint reads `render.yaml` from the repo root)
+   - Connect your GitHub repo
+   - Render will automatically detect the `render.yaml` file and create a Web Service
+3. **Set required environment variables** in the Render dashboard:
+   - `MONGODB_URI` — Your MongoDB Atlas connection string (e.g., `mongodb+srv://user:pass@cluster.mongodb.net/expense-scanner`)
+   - `CLOUDINARY_CLOUD_NAME` — From your Cloudinary account
+   - `CLOUDINARY_API_KEY` — From your Cloudinary account
+   - `CLOUDINARY_API_SECRET` — From your Cloudinary account
+   - `OPENAI_API_KEY` — Your OpenAI API key
+4. **No root directory change needed** — `render.yaml` sets `rootDir: backend` automatically
+5. **Deploy** — Render will build and deploy
+
+> ⚠️ **Important**: You **must** set a remote `MONGODB_URI` (e.g., MongoDB Atlas) in Render's environment variables. The app will not run with the default localhost URI on Render.
+
+### Option 2: Deploy Frontend separately
 ```bash
 cd frontend
 npm run build
 vercel --prod
 ```
+Then update `FRONTEND_URL` in your Render env vars to your Vercel deployment URL.
 
-### Backend → Render
-1. Push to GitHub
-2. Create new Web Service on Render
-3. Set root directory: `backend`
-4. Build command: `npm install`
-5. Start command: `node server.js`
-6. Add environment variables from `.env`
+### Option 3: Docker (for single-server deployment)
+```bash
+docker-compose up --build
+```
+This runs MongoDB, backend, and frontend (via nginx) together.
 
 ## 🧪 Testing
 
