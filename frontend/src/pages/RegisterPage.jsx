@@ -44,14 +44,14 @@ const RegisterPage = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="John Doe" className="input-field pl-10" required />
+                <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Enter your full name" className="input-field pl-10" required />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} placeholder="you@example.com" className="input-field pl-10" required />
+                <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} placeholder="Enter your email" className="input-field pl-10" required />
               </div>
             </div>
             <div>
