@@ -2,6 +2,12 @@
 
 A production-ready **AI-powered Expense Receipt Scanner** built with React.js, Node.js, Express, MongoDB Atlas, Tesseract.js OCR, OpenAI GPT-4, and Cloudinary. Automatically digitize receipts, extract expense data, categorize spending, detect anomalies, and secure backup to the cloud.
 
+## 🌐 Live Demo
+
+Check out the live application: [**AI Expense Receipt Scanner**](https://ai-expense-receipt-scanner-frontend.onrender.com/)
+
+> ⚠️ **Note**: The backend may take a few seconds to wake up on first visit after inactivity (free tier cold start). Please allow 30–60 seconds for the server to respond.
+
 ## 🚀 Features
 
 ### Core Features
