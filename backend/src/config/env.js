@@ -1,8 +1,13 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Load .env from backend directory
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Load .env from backend directory only in development
+if (process.env.NODE_ENV !== 'production') {
+  const result = dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+  if (result.error) {
+    console.warn('⚠️  No .env file found, using environment variables');
+  }
+}
 
 const requiredInProduction = (key, value) => {
   if (process.env.NODE_ENV === 'production') {

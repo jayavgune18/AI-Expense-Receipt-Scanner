@@ -1,7 +1,12 @@
 const path = require('path');
 
-// Load .env with explicit path so it works regardless of CWD
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+// Load .env with explicit path so it works regardless of CWD (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  const result = require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+  if (result.error) {
+    console.warn('⚠️  No .env file found, using environment variables');
+  }
+}
 
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
