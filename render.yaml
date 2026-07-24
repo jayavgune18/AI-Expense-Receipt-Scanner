@@ -43,6 +43,6 @@ services:
       - key: EMAIL_FROM
         value: noreply@expensescanner.com
       - key: FRONTEND_URL
-        value: https://expense-scanner-frontend.onrender.com
+        value: https://ai-expense-receipt-scanner-frontend.onrender.com
       - key: BACKEND_URL
-        value: https://expense-scanner-api.onrender.com
+        value: https://ai-expense-receipt-scanner-backend.onrender.com
