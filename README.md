@@ -1,281 +1,399 @@
-# 🧾 AI Expense Receipt Scanner - Full-Stack Application
+# 🧾 ScanExpense — AI Expense & Receipt Scanner
 
-A production-ready **AI-powered Expense Receipt Scanner** built with React.js, Node.js, Express, MongoDB Atlas, Tesseract.js OCR, OpenAI GPT-4, and Cloudinary. Automatically digitize receipts, extract expense data, categorize spending, detect anomalies, and secure backup to the cloud.
+A full-stack, production-ready AI-powered expense and receipt management application built with the MERN stack. Features intelligent OCR scanning, AI-driven expense categorization, interactive dashboards, cloud backup, fraud detection, and multi-format reporting.
 
-## 🌐 Live Demo
-
-Check out the live application: [**AI Expense Receipt Scanner**](https://ai-expense-receipt-scanner-frontend.onrender.com/)
-
-> ⚠️ **Note**: The backend may take a few seconds to wake up on first visit after inactivity (free tier cold start). Please allow 30–60 seconds for the server to respond.
-
-## 🚀 Features
-
-### Core Features
-- **User Authentication** — JWT + bcrypt, register/login, password reset, profile management
-- **Receipt Upload** — Drag-and-drop or file upload, image preview, multiple file support
-- **OCR Processing** — Tesseract.js extracts merchant name, date, total, tax, items, receipt number
-- **AI Categorization** — OpenAI GPT-4 classifies expenses into 9 categories with confidence scoring
-- **Expense Dashboard** — Monthly spending, category breakdown, trends, top merchants, interactive charts
-- **Smart Search** — Search by merchant, category, date range, amount filters
-- **Cloud Backup** — Cloudinary storage for receipt images, backup history, multi-device sync
-- **AI Insights** — Spending analysis, budget suggestions, savings tips, anomaly detection
-- **Report Generation** — PDF & Excel export with monthly summaries and category breakdowns
-- **Notifications** — In-app & email alerts for processing status, budget warnings, backup completion
-
-### Advanced Features
-- **AI Financial Chatbot** — Ask questions about your spending, get personalized advice
-- **Duplicate Detection** — Auto-detect duplicate receipts by merchant + amount + date
-- **Fraud Detection** — Identify suspicious transactions and unusually high amounts
-- **Multi-Currency Support** — USD, EUR, GBP, INR, JPY, CAD, AUD
-- **Dark/Light Mode** — System-aware with manual toggle, persisted
-- **PWA Support** — Installable, offline-capable progressive web app
-- **Admin Dashboard** — System stats, user management, platform monitoring
-
-## 🏗️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 18, Tailwind CSS, Redux Toolkit, Framer Motion, Recharts, react-hot-toast, Lucide Icons |
-| **Backend** | Node.js, Express.js, Mongoose ODM, JWT, bcryptjs |
-| **Database** | MongoDB Atlas |
-| **OCR** | Tesseract.js |
-| **AI** | OpenAI GPT-4 (extraction, categorization, insights, chatbot) |
-| **Storage** | Cloudinary (image upload, optimization, backup) |
-| **Charts** | Recharts (Area, Pie, Bar, Line charts) |
-| **Deployment** | Vercel (frontend), Render (backend), Docker |
-
-## 📁 Project Structure
-
-```
-expense-scanner/
-├── backend/                     # Node.js + Express API
-│   ├── src/
-│   │   ├── config/             # Database, env, cloudinary, openai config
-│   │   ├── models/             # Mongoose schemas (8 collections)
-│   │   ├── routes/             # Express route handlers (8 modules)
-│   │   ├── controllers/        # Business logic controllers
-│   │   ├── services/           # Core services (auth, ocr, ai, storage, email, report, duplicate)
-│   │   ├── middleware/         # Auth, admin, upload, validation, error handling, rate limiting
-│   │   └── utils/              # Logger, helpers
-│   ├── server.js               # Entry point
-│   └── package.json
-├── frontend/                   # React + Vite + Tailwind
-│   ├── src/
-│   │   ├── api/                # Axios client + API modules
-│   │   ├── components/         # Reusable UI components (common, layout, auth, feature-specific)
-│   │   ├── pages/              # 14 page components
-│   │   ├── store/              # Redux Toolkit store + slices
-│   │   ├── utils/              # Constants, formatters
-│   │   └── styles/             # Tailwind CSS with custom components
-│   ├── index.html
-│   ├── vite.config.js
-│   └── package.json
-├── docker/                     # Docker configuration
-│   ├── Dockerfile.backend
-│   └── nginx.conf
-├── docker-compose.yml
-└── README.md
-```
-
-## 🔌 API Endpoints
-
-### Authentication
-```
-POST   /api/auth/register           # Create account
-POST   /api/auth/login              # Sign in
-POST   /api/auth/logout             # Sign out
-POST   /api/auth/refresh-token      # Refresh JWT
-POST   /api/auth/forgot-password    # Send reset email
-POST   /api/auth/reset-password/:token  # Reset password
-GET    /api/auth/me                 # Get profile
-PUT    /api/auth/me                 # Update profile
-PUT    /api/auth/change-password    # Change password
-```
-
-### Receipts
-```
-POST   /api/receipts/upload         # Upload receipt image
-GET    /api/receipts                # List with search/filter/pagination
-GET    /api/receipts/stats          # Receipt statistics
-GET    /api/receipts/:id            # Get single receipt
-PUT    /api/receipts/:id            # Update receipt data
-DELETE /api/receipts/:id            # Delete receipt
-POST   /api/receipts/:id/reprocess  # Re-run OCR + AI
-```
-
-### Expenses
-```
-GET    /api/expenses                # List with search/filter
-GET    /api/expenses/stats          # Aggregate stats
-GET    /api/expenses/:id            # Get expense
-POST   /api/expenses                # Create expense
-PUT    /api/expenses/:id            # Update expense
-DELETE /api/expenses/:id            # Delete expense
-```
-
-### Insights
-```
-GET    /api/insights                # AI-generated insights
-GET    /api/insights/spending-habits  # Spending pattern analysis
-GET    /api/insights/budget-suggestions # Budget recommendations
-GET    /api/insights/anomalies      # Anomaly detection
-GET    /api/insights/savings        # Savings recommendations
-POST   /api/insights/chat           # AI chatbot
-GET    /api/insights/chat/history   # Chat history
-```
-
-### Reports, Backup, Notifications, Admin
-```
-POST   /api/reports/generate        # Generate PDF/Excel
-GET    /api/reports                  # Report history
-POST   /api/backup                  # Trigger backup
-GET    /api/backup                  # Backup history
-GET    /api/notifications           # Get notifications
-PUT    /api/notifications/read-all  # Mark all as read
-GET    /api/admin/stats             # System stats (admin)
-GET    /api/admin/users             # User management (admin)
-```
-
-## 🗄️ Database Collections
-
-1. **Users** — Auth, profiles, preferences, notification settings
-2. **Receipts** — OCR text, extracted data, AI classification, duplicate/fraud flags
-3. **Expenses** — Transaction data, categories, merchant info, links to receipts
-4. **Categories** — Pre-seeded default categories with AI keywords
-5. **Reports** — Generated report history, stored data
-6. **Notifications** — In-app alerts with TTL index (30-day auto-delete)
-7. **Backups** — Cloud backup tracking
-8. **ChatMessages** — AI chatbot conversation history
-
-## 🚦 Getting Started
-
-### Prerequisites
-- Node.js v18+
-- MongoDB Atlas account (or local MongoDB)
-- Cloudinary account (free tier)
-- OpenAI API key
-
-### 1. Clone & Install
-```bash
-git clone <your-repo-url>
-cd expense-scanner
-
-# Install backend dependencies
-cd backend && npm install
-
-# Install frontend dependencies
-cd ../frontend && npm install
-```
-
-### 2. Configure Environment
-```bash
-# Backend (backend/.env)
-PORT=5000
-MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/expense-scanner
-JWT_SECRET=your-jwt-secret
-JWT_REFRESH_SECRET=your-refresh-secret
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-OPENAI_API_KEY=your-openai-key
-SMTP_HOST=smtp.gmail.com
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-FRONTEND_URL=http://localhost:5173
-```
-
-### 3. Run Development
-```bash
-# Terminal 1: Backend
-cd backend && npm run dev
-
-# Terminal 2: Frontend
-cd frontend && npm run dev
-```
-
-Open http://localhost:5173 — the app is ready!
-
-## 🐳 Docker Deployment
-
-```bash
-# Build and run all services
-docker-compose up --build
-
-# Or build manually:
-docker build -f docker/Dockerfile.backend -t expense-scanner-backend .
-docker run -p 5000:5000 --env-file backend/.env expense-scanner-backend
-```
-
-## 🚀 Production Deployment
-
-### Option 1: Deploy to Render (Backend only, using `render.yaml`)
-
-1. **Push the repo to GitHub**
-2. **In Render Dashboard:**
-   - Click **"New +"** → **"Blueprint"** (Blueprint reads `render.yaml` from the repo root)
-   - Connect your GitHub repo
-   - Render will automatically detect the `render.yaml` file and create a Web Service
-3. **Set required environment variables** in the Render dashboard:
-   - `MONGODB_URI` — Your MongoDB Atlas connection string (e.g., `mongodb+srv://user:pass@cluster.mongodb.net/expense-scanner`)
-   - `CLOUDINARY_CLOUD_NAME` — From your Cloudinary account
-   - `CLOUDINARY_API_KEY` — From your Cloudinary account
-   - `CLOUDINARY_API_SECRET` — From your Cloudinary account
-   - `OPENAI_API_KEY` — Your OpenAI API key
-4. **No root directory change needed** — `render.yaml` sets `rootDir: backend` automatically
-5. **Deploy** — Render will build and deploy
-
-> ⚠️ **Important**: You **must** set a remote `MONGODB_URI` (e.g., MongoDB Atlas) in Render's environment variables. The app will not run with the default localhost URI on Render.
-
-### Option 2: Deploy Frontend separately
-```bash
-cd frontend
-npm run build
-vercel --prod
-```
-Then update `FRONTEND_URL` in your Render env vars to your Vercel deployment URL.
-
-### Option 3: Docker (for single-server deployment)
-```bash
-docker-compose up --build
-```
-This runs MongoDB, backend, and frontend (via nginx) together.
-
-## 🧪 Testing
-
-```bash
-# Backend tests
-cd backend && npm test
-
-# Frontend build check
-cd frontend && npm run build
-```
-
-## 📊 Key Architecture Decisions
-
-- **Redux Toolkit** for predictable state management with async thunks
-- **Framer Motion** for smooth page transitions and micro-interactions
-- **Tesseract.js** for client-side OCR (free, no API costs)
-- **OpenAI GPT-4** for intelligent receipt parsing and financial insights
-- **Cloudinary** for optimized image delivery and automatic backup
-- **JWT + httpOnly cookies** for secure authentication with refresh token rotation
-- **Winston** for structured server logging
-- **Helmet + CORS + Rate Limiting** for security
-
-## 🔒 Security Features
-
-- Bcrypt password hashing (12 rounds)
-- JWT access (15min) + refresh (7d) token rotation
-- HTTP-only cookies for refresh tokens
-- Input validation on all endpoints (express-validator)
-- File upload validation (type, size limits)
-- Rate limiting on auth endpoints
-- Helmet security headers
-- CORS restricted to frontend domain
-
-## 📝 License
-
-MIT
+Designed for individuals and small businesses to digitize, organize, and gain insights from financial receipts and expenses — ideal for final-year projects, placement portfolios, and technical showcases.
 
 ---
 
-Built with ❤️ using React, Node.js, AI & Cloud Technologies
+## 📚 Table of Contents
+
+- [Live Demo](#-live-demo)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started & Local Setup](#-getting-started--local-setup)
+- [API Overview](#-api-overview)
+- [Security Architecture](#-security-architecture)
+- [Docker Support](#-docker-support)
+- [Contact](#-contact)
+
+---
+
+## 🌐 Live Demo
+
+Check out the live application: [🔗 ScanExpense](https://expense-scanner-frontend.onrender.com)
+
+---
+
+## 🚀 Key Features
+
+### 1. **Smart Receipt Scanning & OCR**
+- Upload receipt images via drag-and-drop file upload (powered by `react-dropzone`).
+- Automatic text extraction using **Tesseract.js** OCR engine with **image preprocessing** (grayscale, normalize, sharpen via Sharp).
+- Extracted data parsed and structured into expense records with merchant name, date, amounts, line items, and tax.
+- Fallback extraction logic when OCR confidence is low.
+
+### 2. **AI-Powered Receipt Parsing**
+- Integrates with **OpenAI GPT-4** to intelligently parse raw OCR text into structured receipt data.
+- Extracts merchant name, date, total/subtotal/tax amounts, receipt number, currency, line items, and category.
+- Smart category assignment from 9 predefined categories (Food & Dining, Transport, Shopping, Healthcare, Education, Entertainment, Travel, Utilities, Others).
+- Fallback regex-based extraction when AI is unavailable.
+
+### 3. **AI Financial Insights & Advisor**
+- **GPT-4 powered insights engine** analyzes your spending patterns and generates personalized financial advice.
+- Insights categorized by type: **saving tips**, **warnings**, **budget recommendations**, and **general insights**.
+- Each insight includes a priority level (high/medium/low) for actionable decision-making.
+- **AI Chatbot Assistant** — conversational interface to ask questions about your finances, get spending summaries, and receive personalized advice.
+
+### 4. **Anomaly & Fraud Detection**
+- **Statistical anomaly detection**: Flags transactions that exceed 3x the category average (Z-score based).
+- Severity classification: **high** (>5x average) and **medium** (>3x average) severity levels.
+- **Duplicate receipt detection**: Identifies receipts with same merchant and similar amounts within a 3-day window.
+- **Fraud scoring**: Detects 3+ identical receipts within 24 hours and flags amounts over $10,000.
+- Real-time fraud assessment during receipt upload with confidence scoring.
+
+### 5. **Interactive Dashboard & Analytics**
+- Real-time spending summaries with **Recharts** visualizations (bar, pie, line, and area charts).
+- Monthly/yearly spending trends and category breakdowns with color-coded categories.
+- Key metrics: total expenses, monthly spending, average transaction value, receipt count.
+- Responsive stat cards with animated counters and skeleton loading states.
+
+### 6. **Expense Management**
+- Full CRUD operations on expenses with search, filter (by category), and sort (by date/amount).
+- Manual expense entry for non-receipt transactions.
+- Paginated listing with 50 items per page.
+- Total spending summary with formatted currency display.
+
+### 7. **Budget Management**
+- Set and track monthly budgets by category.
+- Visual progress indicators showing spending vs. budget limits.
+- Budget alerts and overspend warnings.
+
+### 8. **Reports & Export**
+- Generate **PDF reports** using PDFKit with professional formatting and branding.
+- Export multi-sheet **Excel reports** via ExcelJS for bookkeeping.
+- Downloadable reports with unique filenames and timestamps.
+- Report history with download management.
+
+### 9. **Cloud Backup & Restore**
+- One-click backup of all receipts, expenses, and user data.
+- **Cloudinary** integration for receipt image storage with secure uploads.
+- Full restore capability from any backup point.
+- Backup history with timestamps and status tracking.
+- **Automated cron-based backup scheduling** via node-cron.
+
+### 10. **Admin Panel**
+- User management dashboard with role-based access (Admin/User).
+- System-wide statistics: total users, receipts, expenses, storage usage.
+- User account management (view, delete).
+- Backup oversight and restore operations.
+
+### 11. **Security & Authentication**
+- **JWT-based authentication** with dual-token system: short-lived access tokens (15 min) + refresh tokens (7 days) with rotation.
+- **Password reset flow**: Forgot password → email with reset link → secure token-based reset.
+- bcrypt password hashing with salt rounds.
+- Rate limiting: API-wide (100 req/15 min) + upload-specific (20 uploads/5 min).
+- Helmet security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, etc.).
+- CORS with strict origin whitelist.
+- Input validation and sanitization via express-validator.
+- Centralized error handler preventing information leakage.
+
+### 12. **Email Notification System**
+- Transactional emails: welcome messages, password reset links, backup confirmations.
+- Configurable SMTP provider (Gmail, SendGrid, etc.).
+- HTML email templates with responsive design.
+- Notification preferences and in-app notification center.
+
+### 13. **Dark/Light Theme**
+- Full dark mode support with persistent theme selection via Redux.
+- Smooth theme transitions with Framer Motion animations.
+- System preference detection for initial theme.
+
+### 14. **Responsive UI & Animations**
+- Built with **Tailwind CSS** for fully responsive design across desktop, tablet, and mobile.
+- **Framer Motion** page transitions, staggered list animations, and micro-interactions.
+- Glass-morphism card designs with hover effects.
+- Skeleton loading states for all data-fetching views.
+
+### 15. **Image Processing Pipeline**
+- Receipt image preprocessing with **Sharp**: grayscale conversion, normalization, and sharpening for improved OCR accuracy.
+- Multiple upload support with file type and size validation (10MB limit).
+- Local filesystem + Cloudinary dual storage strategy.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 18, Vite, Tailwind CSS, Framer Motion, Redux Toolkit, Recharts, Lucide Icons |
+| **Backend** | Node.js, Express.js, Socket.IO, Winston Logger |
+| **Database** | MongoDB + Mongoose (with indexed schemas) |
+| **OCR** | Tesseract.js |
+| **AI/ML** | OpenAI GPT-4 API |
+| **Storage** | Cloudinary (images), Local filesystem (uploads) |
+| **Auth** | JWT (access + refresh tokens), bcrypt |
+| **Email** | Nodemailer (SMTP) |
+| **Reports** | PDFKit, ExcelJS |
+| **Containerization** | Docker + Docker Compose |
+| **Scheduling** | node-cron |
+
+---
+
+## 📁 Project Structure
+
+```text
+expense-scanner/
+├── backend/
+│   ├── config/              # DB, Cloudinary, OpenAI, env config
+│   ├── controllers/         # Express route handlers (auth, receipts, expenses, reports, etc.)
+│   ├── middleware/           # JWT auth, admin guard, upload, rate limiter, validation, error handler
+│   ├── models/              # Mongoose schemas (User, Receipt, Expense, Category, Report, etc.)
+│   ├── routes/              # RESTful API route definitions
+│   ├── services/            # Business logic (AI, OCR, email, storage, reports, duplicates)
+│   ├── templates/           # Email and report templates
+│   ├── utils/               # Helpers and logger
+│   ├── uploads/             # Local file uploads directory
+│   ├── public/              # Static assets and placeholder images
+│   ├── jobs/                # Cron jobs (backup scheduling)
+│   ├── scripts/             # Utility scripts
+│   ├── server.js            # Server entry point
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── api/             # Axios API client and auth helpers
+│   │   ├── components/      # Reusable UI components (layouts, common, auth)
+│   │   ├── pages/           # Route pages (Landing, Login, Dashboard, Receipts, etc.)
+│   │   ├── store/           # Redux Toolkit slices (auth, theme, expenses, receipts)
+│   │   └── utils/           # Formatters & helpers
+│   ├── public/images/       # App screenshots
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── package.json
+├── docker/
+│   ├── Dockerfile.backend
+│   └── nginx.conf
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── .env.example
+├── .gitignore
+├── render.yaml
+└── README.md
+```
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Authentication
+| Login | Register |
+|:----:|:----:|
+| ![Login](frontend/public/images/Login.png) | ![Register](frontend/public/images/Register.png) |
+
+### 📊 Dashboard
+| Dashboard Overview |
+|:----:|
+| ![Dashboard](frontend/public/images/Dashboard.png) |
+
+### 📁 Receipt & Expense Management
+| Receipt Upload | Reconciliation Workbench |
+|:----:|:----:|
+| ![UploadFile](frontend/public/images/UploadFile.png) | ![Reconciliation Workbench](frontend/public/images/ReconciliationWorkbench.png) |
+
+### 🚨 Fraud Detection & Audit
+| Fraud Alerts | Audit Logs |
+|:----:|:----:|
+| ![FraudAlerts](frontend/public/images/FraudAlerts.png) | ![Audit Logs](frontend/public/images/AuditLogs.png) |
+
+### ⚙️ Settings
+| Profile | Storage | Password |
+|:----:|:----:|:----:|
+| ![SettingsProfile](frontend/public/images/SettingsProfile.png) | ![SettingsStorage](frontend/public/images/SettingsStorage.png) | ![SettingsPassword](frontend/public/images/SettingsPassword.png) |
+
+| Devices & Sessions | Account Options |
+|:----:|:----:|
+| ![SettingsDevicesAndSessions](frontend/public/images/SettingsDevicesAndSessions.png) | ![SettingsAccountOptions](frontend/public/images/SettingsAccountOptions.png) |
+
+---
+
+## 🏃 Getting Started & Local Setup
+
+### **Prerequisites**
+- **Node.js** v18 or higher
+- **MongoDB** (local instance or MongoDB Atlas connection string)
+- **Cloudinary** account (for image uploads)
+- **OpenAI API key** (for AI categorization)
+
+### **Step 1: Clone & Install Dependencies**
+
+```bash
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+### **Step 2: Environment Configuration**
+
+Copy the example environment file and configure your variables:
+
+```bash
+cp .env.example backend/.env
+```
+
+```ini
+# Server
+PORT=5000
+NODE_ENV=development
+
+# MongoDB
+MONGODB_URI=mongodb://localhost:27017/expense-scanner
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key
+JWT_REFRESH_SECRET=your-super-secret-refresh-key
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Cloudinary (for receipt image uploads)
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# OpenAI (for AI categorization)
+OPENAI_API_KEY=your-openai-api-key
+
+# SMTP (for email notifications)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+EMAIL_FROM=noreply@expensescanner.com
+
+# URLs
+FRONTEND_URL=http://localhost:5173
+BACKEND_URL=http://localhost:5000
+```
+
+### **Step 3: Start the Backend Server**
+
+```bash
+cd backend
+npm run dev
+```
+
+The API server starts at `http://localhost:5000`.
+
+### **Step 4: Start the Frontend Client**
+
+```bash
+cd frontend
+npm run dev
+```
+
+The Vite dev server starts at `http://localhost:5173`.
+
+### **Step 5: Access the Application**
+
+Open your browser and navigate to **`http://localhost:5173`**.
+
+---
+
+## 📡 API Overview
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| **Auth** | | |
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and receive JWT tokens |
+| POST | `/api/auth/refresh` | Refresh access token |
+| POST | `/api/auth/forgot-password` | Request password reset email |
+| POST | `/api/auth/reset-password/:token` | Reset password with token |
+| GET | `/api/auth/profile` | Get current user profile |
+| **Receipts** | | |
+| POST | `/api/receipts/upload` | Upload receipt image(s) |
+| GET | `/api/receipts` | List all receipts (paginated) |
+| GET | `/api/receipts/:id` | Get single receipt details |
+| DELETE | `/api/receipts/:id` | Delete a receipt |
+| **Expenses** | | |
+| GET | `/api/expenses` | List expenses (filtered, paginated) |
+| POST | `/api/expenses` | Create a new expense |
+| GET | `/api/expenses/stats` | Get spending statistics and charts data |
+| GET | `/api/expenses/:id` | Get single expense |
+| PUT | `/api/expenses/:id` | Update an expense |
+| DELETE | `/api/expenses/:id` | Delete an expense |
+| **Insights** | | |
+| GET | `/api/insights` | Get AI-powered spending insights |
+| **Reports** | | |
+| POST | `/api/reports/generate` | Generate PDF or Excel report |
+| GET | `/api/reports` | List generated reports |
+| GET | `/api/reports/download/:id` | Download a report file |
+| **Backup** | | |
+| POST | `/api/backup` | Create a new backup |
+| GET | `/api/backup` | List all backups |
+| POST | `/api/backup/restore/:id` | Restore from a backup |
+| DELETE | `/api/backup/:id` | Delete a backup |
+| **Notifications** | | |
+| GET | `/api/notifications` | List user notifications |
+| PUT | `/api/notifications/:id/read` | Mark notification as read |
+| **Admin** | | |
+| GET | `/api/admin/users` | List all users (admin only) |
+| GET | `/api/admin/stats` | Get system statistics (admin only) |
+| DELETE | `/api/admin/users/:id` | Delete user (admin only) |
+| **Health** | | |
+| GET | `/api/health` | Health check endpoint |
+
+---
+
+## 🔒 Security Architecture
+
+1. **JWT Token Authentication**: Short-lived access tokens (15 min) with refresh token rotation (7 days). Tokens are sent via secure HTTP-only cookies or Authorization headers.
+
+2. **Rate Limiting**: API-wide rate limiting (100 requests per 15 min per IP) and upload-specific limits (20 uploads per 5 min).
+
+3. **Input Validation**: All request bodies validated using `express-validator` with sanitization to prevent NoSQL injection.
+
+4. **Security Headers**: `Helmet` middleware configures 15+ HTTP security headers (CSP, HSTS, X-Frame-Options, etc.).
+
+5. **CORS Protection**: Strict origin whitelist allowing only configured frontend/backend URLs.
+
+6. **Password Security**: bcrypt hashing with salt rounds; password reset flow with expiring tokens.
+
+7. **File Upload Safety**: File type validation, size limits (10MB), and Cloudinary virus scanning integration.
+
+8. **Error Handling**: Centralized error handler prevents information leakage in production.
+
+---
+
+## 🐳 Docker Support
+
+### Development
+```bash
+docker-compose up
+```
+
+### Production
+```bash
+docker-compose -f docker-compose.prod.yml up
+```
+
+---
+
+## 📬 Contact
+
+Feel free to reach out:
+
+- **LinkedIn**: [Jay Avgune](https://www.linkedin.com/in/jay-avgune-1316b323a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- **GitHub**: [jayavgune18](https://github.com/jayavgune18)
+
+---
+
+<div align="center">
+  <strong>Made with ❤️ by Jay Avgune</strong>
+</div>

@@ -12,6 +12,10 @@ const CATEGORIES = [
 
 const extractReceiptData = async (rawText) => {
   try {
+    if (!openai) {
+      logger.warn('OpenAI not configured, using fallback extraction');
+      return fallbackExtraction(rawText);
+    }
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -103,6 +107,11 @@ const generateInsights = async (userId) => {
 
     const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
     const monthlyAverage = expenses.length > 0 ? totalSpending / Math.max(1, Math.ceil(expenses.length / 30)) : 0;
+
+    if (!openai) {
+      logger.warn('OpenAI not configured, using default insights');
+      return getDefaultInsights(totalSpending, topCategory);
+    }
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
@@ -208,6 +217,11 @@ const detectAnomalies = async (userId) => {
 
 const getChatbotResponse = async (userId, message, chatHistory) => {
   try {
+    if (!openai) {
+      logger.warn('OpenAI not configured, chatbot unavailable');
+      return 'The AI Assistant is not available right now. Please set up an OpenAI API key in your environment variables to enable this feature.';
+    }
+
     const expenses = await Expense.find({ userId })
       .sort({ date: -1 })
       .limit(20)
