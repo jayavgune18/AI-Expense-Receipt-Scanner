@@ -1,5 +1,15 @@
 # 🧾 ScanExpense — AI Expense & Receipt Scanner
 
+<p align="left">
+  <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white" alt="Node" />
+  <img src="https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/TailwindCSS-3-38B2AC?logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+</p>
+
 A full-stack, production-ready AI-powered expense and receipt management application built with the MERN stack. Features intelligent OCR scanning, AI-driven expense categorization, interactive dashboards, cloud backup, fraud detection, and multi-format reporting.
 
 Designed for individuals and small businesses to digitize, organize, and gain insights from financial receipts and expenses — ideal for final-year projects, placement portfolios, and technical showcases.
@@ -12,6 +22,7 @@ Designed for individuals and small businesses to digitize, organize, and gain in
 - [Key Features](#-key-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
+- [Screenshots](#-screenshots)
 - [Getting Started & Local Setup](#-getting-started--local-setup)
 - [API Overview](#-api-overview)
 - [Security Architecture](#-security-architecture)
